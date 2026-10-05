@@ -50,10 +50,14 @@ console.log('Boundary tests passed.');
 
 // New tools sanity tests
 assert.strictEqual(S.vasi([{handUnits:10,depigmentation:50},{handUnits:2,depigmentation:100}]),7);
+assert.strictEqual(S.vasi([{handUnits:10,depigmentation:63}]),0);
 assert.deepStrictEqual(S.clasi({regions:[{erythema:3,scale:2,dyspigmentation:1,scarring:2}],mucosa:1,acuteHairLoss:1,nonscarringAlopecia:3,scarringAlopecia:4,dyspigmentGte12m:true}),{activity:10,damage:8});
 assert.strictEqual(S.clasi({regions:[],scarringAlopecia:2}).damage,0,'legacy invalid CLASI scarring alopecia values must not be counted');
-assert.strictEqual(S.absis({bsa:10,weight:1.5,oralExtent:2,drinkDiscomfort:4,foodDiscomfort:5}).total,26);
+assert.deepStrictEqual(S.absis({skinRegions:[{bsa:9,weight:1.5,maxBsa:9},{bsa:1,weight:1,maxBsa:9}],oralSites:[true,true,false,false,false,false,false,false,false,false,false],foodDiscomfort:[0,0,0,0,0,0,0,0,1]}),{skin:14.5,oralExtent:2,oralDiscomfort:9,total:25.5});
+assert.strictEqual(S.absis({skinRegions:[{bsa:100,weight:1.5,maxBsa:100}],oralSites:Array(11).fill(true),foodDiscomfort:Array(9).fill(1)}).total,206);
 assert.strictEqual(S.uct([4,4,4,4]),16);
+assert.strictEqual(S.uctSeverity(16).label,'Tam kontrollü');
+assert.strictEqual(S.uctSeverity(12).label,'İyi kontrollü');
 assert.strictEqual(S.poem([4,4,4,4,4,4,4]),28);
 assert.strictEqual(S.mmasi({foreheadArea:6,foreheadDarkness:4,rightMalarArea:6,rightMalarDarkness:4,leftMalarArea:6,leftMalarDarkness:4,chinArea:6,chinDarkness:4}),24);
 assert.strictEqual(S.gags({forehead:4,rightCheek:4,leftCheek:4,nose:4,chin:4,chestBack:4}),44);
@@ -69,5 +73,5 @@ assert.strictEqual(S.losai(morpheaLoscatMax),162);
 assert.strictEqual(S.losdi(morpheaLoscatMax),216);
 assert.deepStrictEqual(S.loscat(morpheaLoscatMax),{activity:162,damage:216});
 
-assert.strictEqual(S.rasi({forehead:{area:6,erythema:3,papules:3,telangiectasia:3},rightCheek:{area:6,erythema:3,papules:3,telangiectasia:3},leftCheek:{area:6,erythema:3,papules:3,telangiectasia:3},noseChin:{area:6,erythema:3,papules:3,telangiectasia:3}}),54);
+assert.strictEqual(S.rasi({cheeks:{area:6,erythema:4,papules:4,telangiectasia:4},forehead:{area:6,erythema:4,papules:4,telangiectasia:4},nose:{area:6,erythema:4,papules:4,telangiectasia:4,phyma:3},chin:{area:6,erythema:4,papules:4,telangiectasia:4}}),72);
 console.log('New tools sanity tests passed.');

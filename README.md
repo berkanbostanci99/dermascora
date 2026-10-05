@@ -80,3 +80,10 @@ Bu uygulama eğitim ve klinik dokümantasyon desteği içindir. Tanı, tedavi ve
 ## Gizlilik
 
 Hesaplamalar tamamen istemci tarafında JavaScript ile yapılır. Uygulama hasta verisi toplamaz veya sunucuya göndermez.
+
+## Klinik doğruluk düzeltmeleri (2026-10)
+
+- **RASI:** Yayımlanmış RASI yapısına düzeltildi: yanaklar/alın/burun/çene katsayıları 0.4/0.3/0.2/0.1; alan 0–6; E/P/T diğer bölgelerde 0–4, burunda 0–3; phyma yalnız burunda 0–3; maksimum 72.
+- **ABSIS:** Hızlı/özet oral giriş kaldırıldı. Deri skoru 7 anatomik bölgede ayrı BSA × lezyon ağırlığı ile; oral yaygınlık 11 bölgeyle; subjektif oral şiddet 9 besin düzeyi × 0/0.5/1 rahatsızlık faktörüyle hesaplanır. Toplam aralık 0–206.
+- **VASI:** Depigmentasyon girişi orijinal kategorilerle sınırlandı: 0, 10, 25, 50, 75, 90, 100%.
+- **UCT:** 16 puan artık “Tam kontrollü”, 12–15 “İyi kontrollü”, 0–11 “Yetersiz kontrollü” olarak ayrı gösterilir.

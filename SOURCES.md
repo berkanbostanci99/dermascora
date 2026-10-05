@@ -89,3 +89,8 @@ Kaynakların kısa listesi uygulama içindeki her hesaplayıcının altında ba�
 - Earlier LoSCAT versions used mLoSSI and a three-domain LoSDI. The v1.6.7 LoSCAT page follows the current form described by Teske & Jacobe, while mLoSSI remains available as a separate historical activity calculator.
 - Arkachaisri T, et al. Development and initial validation of the Localized Scleroderma Skin Damage Index and Physician Global Assessment of disease Damage. Rheumatology (Oxford). 2010;49:373–381. PMID: 20008472.
 - Skrzypek-Salamon A, et al. Localized Scleroderma Cutaneous Assessment Tool adapted for use in adult patients. Health Qual Life Outcomes. 2018;16:185. PMID: 30217204. DOI: 10.1186/s12955-018-1010-z.
+
+## 2026-10 doğruluk notları
+- RASI implementasyonu: Wienholtz NKF, et al. *Validity and reliability of the Rosacea Area and Severity Index: A novel scoring system for clinical assessment of rosacea severity.* J Eur Acad Dermatol Venereol. 2023;37:574–580. DOI: 10.1111/jdv.18721.
+- ABSIS implementasyonu: Pfütze M, et al. *Clinical assessment of disease activity in pemphigus: a retrospective study of pemphigus patients with a standardized scoring system.* J Dtsch Dermatol Ges. 2007;5:434–441; ayrıca Rosenbach M, et al. J Invest Dermatol. 2009;129:2404–2410.
+- ABSIS toplam aralığı: deri 0–150 + oral yaygınlık 0–11 + subjektif oral şiddet 0–45 = 0–206.

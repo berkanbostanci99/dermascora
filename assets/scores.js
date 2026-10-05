@@ -217,9 +217,12 @@
   }
 
   function vasi(regions) {
+    // Original VASI uses categorical residual depigmentation estimates.
+    const allowedDepigmentation = [0, 10, 25, 50, 75, 90, 100];
     const total = (regions || []).reduce((acc, r) => {
       const hu = clamp(r.handUnits, 0, 1000);
-      const dep = clamp(r.depigmentation, 0, 100) / 100;
+      const rawDep = Number(r.depigmentation);
+      const dep = allowedDepigmentation.includes(rawDep) ? rawDep / 100 : 0;
       return acc + hu * dep;
     }, 0);
     return Math.round(total * 100) / 100;
@@ -240,11 +243,26 @@
   }
 
   function absis(values) {
-    const area = clamp(values.bsa, 0, 100);
-    const weight = clamp(values.weight, 0, 1.5);
-    const skin = Math.round(area * weight * 10) / 10;
-    const oralExtent = clamp(values.oralExtent, 0, 11);
-    const oralDiscomfort = clamp(values.drinkDiscomfort, 0, 10) + clamp(values.foodDiscomfort, 0, 10);
+    // ABSIS skin: sum of regional %BSA x lesion-quality weighting factor (max 150).
+    const skinRegions = values.skinRegions || [];
+    const skin = Math.round(skinRegions.reduce((acc, r) => {
+      const area = clamp(r.bsa, 0, Number.isFinite(Number(r.maxBsa)) ? Number(r.maxBsa) : 100);
+      const weight = [0, 0.5, 1, 1.5].includes(Number(r.weight)) ? Number(r.weight) : 0;
+      return acc + area * weight;
+    }, 0) * 10) / 10;
+
+    // Oral extent: presence/absence in 11 specified oral sites (max 11).
+    const oralExtent = Array.isArray(values.oralSites)
+      ? values.oralSites.reduce((acc, present) => acc + (present ? 1 : 0), 0)
+      : clamp(values.oralExtent, 0, 11);
+
+    // Subjective oral severity: food level (1..9) x discomfort factor (0, 0.5, 1), max 45.
+    const factors = values.foodDiscomfort || [];
+    const oralDiscomfort = Math.round(factors.reduce((acc, factor, i) => {
+      const f = [0, 0.5, 1].includes(Number(factor)) ? Number(factor) : 0;
+      return acc + (i + 1) * f;
+    }, 0) * 10) / 10;
+
     return { skin, oralExtent, oralDiscomfort, total: Math.round((skin + oralExtent + oralDiscomfort) * 10) / 10 };
   }
 
@@ -253,6 +271,7 @@
   }
 
   function uctSeverity(score) {
+    if (score >= 16) return { label: 'Tam kontrollü', tone: 'clear' };
     if (score >= 12) return { label: 'İyi kontrollü', tone: 'low' };
     return { label: 'Yetersiz kontrollü', tone: 'high' };
   }
@@ -359,11 +378,15 @@
   }
 
   function rasi(regions) {
-    const weights = { forehead: 0.2, rightCheek: 0.3, leftCheek: 0.3, noseChin: 0.2 };
+    // Published RASI regions: cheeks (combined), forehead, nose, chin.
+    // E/P/T are 0-4 in every region; phyma is 0-3 and applies to the nose only.
+    const weights = { cheeks: 0.4, forehead: 0.3, nose: 0.2, chin: 0.1 };
     let total = 0;
     Object.keys(weights).forEach((key) => {
       const r = regions[key] || {};
-      const intensity = clamp(r.erythema, 0, 3) + clamp(r.papules, 0, 3) + clamp(r.telangiectasia, 0, 3);
+      const signMax = key === 'nose' ? 3 : 4;
+      let intensity = clamp(r.erythema, 0, signMax) + clamp(r.papules, 0, signMax) + clamp(r.telangiectasia, 0, signMax);
+      if (key === 'nose') intensity += clamp(r.phyma, 0, 3);
       total += weights[key] * clamp(r.area, 0, 6) * intensity;
     });
     return Math.round(total * 10) / 10;
